@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <style>
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Todo List</h1>
+<input type="text" id="taskInput" placeholder="Add a new task">
+<button onclick="addTask()">Add Task</button>
+
+<ul id="taskList"></ul>
+
+<script>
+  // Task class represents a single task
+  class Task {
+    constructor(description) {
+      this.description = description;
+      this.completed = false;
+    }
+
+    // Method to toggle the completion status of a task
+    toggleCompleted() {
+      this.completed = !this.completed;
+    }
+
+    // Method to generate the HTML representation of the task
+    render() {
+      const taskItem = document.createElement('li');
+      taskItem.textContent = this.description;
+
+      if (this.completed) {
+        taskItem.classList.add('completed');
+      }
+
+      // Toggle completion status on click
+      taskItem.addEventListener('click', () => {
+        this.toggleCompleted();
+        taskItem.classList.toggle('completed');
+      });
+
+      return taskItem;
+    }
+  }
+
+  // TodoList class represents the overall list of tasks
+  class TodoList {
+    constructor() {
+      this.tasks = [];
+    }
+
+    // Method to add a new task to the list
+    addTask(description) {
+      const newTask = new Task(description);
+      this.tasks.push(newTask);
+      this.render();
+    }
+
+    // Method to render the entire task list
+    render() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      this.tasks.forEach(task => {
+        const taskItem = task.render();
+        taskList.appendChild(taskItem);
+      });
+    }
+  }
+
+  // Function to add a task using the input field
+  function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const taskDescription = taskInput.value.trim();
+
+    if (taskDescription !== '') {
+      todoList.addTask(taskDescription);
+      taskInput.value = '';
+    }
+  }
+
+  // Create an instance of TodoList
+  const todoList = new TodoList();
+</script>
+
+</body>
+</html>
